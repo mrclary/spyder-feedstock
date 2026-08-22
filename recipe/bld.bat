@@ -16,21 +16,6 @@ for /F "delims=. tokens=1" %%i in ("%PKG_VERSION%") do set PKG_MAJOR_VER=%%i
 call :replace spyder-menu-win.json spyder-menu.json
 call :replace spyder-menu-v1.json spyder-menu-v1.json.bak
 
-rem  Copy GUI executable stub
-for /F "tokens=*" %%i in (
-    '%CONDA_PYTHON_EXE% -c "import conda_build, pathlib; print(pathlib.Path(conda_build.__file__).parent / 'gui-64.exe')"'
-) do (
-    set exe_path=%%i
-)
-rem  gui-64.exe will be moved to Scripts in post-link.bat for full noarch
-copy /y /b %exe_path% %MENU_DIR%
-
-rem  Copy launch script
-copy /y %RECIPE_DIR%\spyder-script.pyw %SCRIPTS%
-
-rem  Remove spyder.ico from Scripts for full noarch; replaced in post-link.bat
-del /q %SCRIPTS%\spyder.ico
-
 :exit
     exit /b %errorlevel%
 
